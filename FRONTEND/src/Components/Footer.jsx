@@ -135,7 +135,7 @@ function Footer() {
                             />
                             <button
                                 type="submit"
-                                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+                                className="bg-[#bf4221] text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
                             >
                                 <Send size={16} />
                                 <span>Subscribe</span>
