@@ -39,7 +39,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-white shadow-md py-4 px-6">
+      <nav className="bg-white shadow-md sticky z-50 top-0 py-4 px-6">
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
