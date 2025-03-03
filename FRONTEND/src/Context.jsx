@@ -5,7 +5,7 @@ import { createContext } from "react";
 export const StoreContext = createContext()
 
 export const StoreContextProvider = ({children})=>{
-    const url = "http://localhost:5000/api"
+    const url = "http://localhost:5000/"
     const [token, setToken] = useState("")
 
     useEffect(()=>{
