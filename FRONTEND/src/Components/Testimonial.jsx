@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
+import sarah from "../assets/sarah.jpeg";
+import dibya from "../assets/dibya.jpeg";
+import aisha from "../assets/aisha.jpeg";
+import thomas from "../assets/thomas.jpeg";
+
+
 const Testimonials = () => {
   const testimonials = [
     {
@@ -10,15 +16,15 @@ const Testimonials = () => {
       location: 'New York, USA',
       text: "The quality of craftsmanship is exceptional. I've purchased several items and each one has a special place in my home. Knowing the story behind each piece makes them even more meaningful.",
       rating: 5,
-      imagePlaceholder: '/api/placeholder/100/100'
+      imagePlaceholder: sarah
     },
     {
       id: 2,
-      name: 'Miguel Rodriguez',
-      location: 'Barcelona, Spain',
+      name: 'Dibya Pattnaik',
+      location: 'Delhi, India',
       text: 'I was looking for unique gifts that tell a story and found exactly what I needed. The customer service was incredible, and they helped me find the perfect pieces for my family.',
       rating: 5,
-      imagePlaceholder: '/api/placeholder/100/100'
+      imagePlaceholder: dibya
     },
     {
       id: 3,
@@ -26,7 +32,7 @@ const Testimonials = () => {
       location: 'London, UK',
       text: "As someone who appreciates traditional craftsmanship, I'm thrilled to have found this marketplace. The ceramics I purchased are not only beautiful but functional works of art.",
       rating: 4,
-      imagePlaceholder: '/api/placeholder/100/100'
+      imagePlaceholder: aisha
     },
     {
       id: 4,
@@ -34,7 +40,7 @@ const Testimonials = () => {
       location: 'Berlin, Germany',
       text: 'The shipping was fast and the packaging was thoughtful and eco-friendly. The wooden sculptures exceeded my expectations in terms of detail and finish. Highly recommend!',
       rating: 5,
-      imagePlaceholder: '/api/placeholder/100/100'
+      imagePlaceholder: thomas
     }
   ];
 
