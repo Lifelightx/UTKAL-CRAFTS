@@ -7,7 +7,7 @@ const FeaturedProducts = () => {
     {
       id: 1,
       name: 'Handcrafted Ceramic Vase',
-      price: 79.99,
+      price: 799,
       rating: 4.8,
       imagePlaceholder: '/api/placeholder/400/500',
       description: 'Unique ceramic vase with traditional patterns'
@@ -15,7 +15,7 @@ const FeaturedProducts = () => {
     {
       id: 2,
       name: 'Woven Jute Basket',
-      price: 49.99,
+      price: 499,
       rating: 4.7,
       imagePlaceholder: '/api/placeholder/400/500',
       description: 'Sustainable and stylish storage basket'
@@ -23,7 +23,7 @@ const FeaturedProducts = () => {
     {
       id: 3,
       name: 'Hand-painted Silk Scarf',
-      price: 65.00,
+      price: 650,
       rating: 4.9,
       imagePlaceholder: '/api/placeholder/400/500',
       description: 'Elegant scarf with artisan patterns'
@@ -31,7 +31,7 @@ const FeaturedProducts = () => {
     {
       id: 4,
       name: 'Carved Wooden Bowl',
-      price: 38.50,
+      price: 385,
       rating: 4.6,
       imagePlaceholder: '/api/placeholder/400/500',
       description: 'Natural wooden bowl with intricate detailing'
@@ -110,7 +110,7 @@ const FeaturedProducts = () => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
-                  className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center"
+                  className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center"
                 >
                   <motion.button
                     whileHover={{ scale: 1.1 }}
@@ -139,7 +139,7 @@ const FeaturedProducts = () => {
                 <h3 className="font-bold text-lg text-stone-800 mb-1">{product.name}</h3>
                 <p className="text-stone-600 text-sm mb-3">{product.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-amber-600">${product.price}</span>
+                  <span className="font-bold text-amber-600">Rs.{product.price}</span>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
