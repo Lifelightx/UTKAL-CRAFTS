@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import bambooImg from "../assets/bamboo.jpg";
-import juteImg from "../assets/jute.jpg";
+import juteImg from "../assets/Jute.jpg";
 import pattachitra from "../assets/pattachitra.jpg";
 import pot from "../assets/pot.jpg";
 import woodCraft from "../assets/woodCraft.jpg";
