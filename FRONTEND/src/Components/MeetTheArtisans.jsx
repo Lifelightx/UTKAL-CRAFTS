@@ -2,6 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Instagram, Globe, ExternalLink } from 'lucide-react';
 
+import elena from "../assets/elena.jpeg";
+import wooden from "../assets/wooden.jpeg";
+import cups from "../assets/cups.jpeg";
+import metal from "../assets/metal.jpeg";
+
+
 const MeetTheArtisans = () => {
   const artisans = [
     {
@@ -10,7 +16,7 @@ const MeetTheArtisans = () => {
       craft: 'Textile Weaver',
       location: 'Oaxaca, Mexico',
       bio: 'Elena creates vibrant textiles using traditional techniques passed down through five generations of her family.',
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: elena,
       instagram: '@elenavasquez',
       featured: true
     },
@@ -20,7 +26,7 @@ const MeetTheArtisans = () => {
       craft: 'Wood Carver',
       location: 'Accra, Ghana',
       bio: 'Specializing in intricate wooden sculptures that tell stories of Ghanaian folklore and daily life.',
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: wooden,
       instagram: '@kwamewood',
       featured: false
     },
@@ -30,7 +36,7 @@ const MeetTheArtisans = () => {
       craft: 'Ceramic Artist',
       location: 'Kyoto, Japan',
       bio: 'Aiko blends traditional Japanese pottery techniques with contemporary designs, creating functional art pieces.',
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: cups,
       instagram: '@aikoceramic',
       featured: false
     },
@@ -40,7 +46,7 @@ const MeetTheArtisans = () => {
       craft: 'Metal Smith',
       location: 'Jaipur, India',
       bio: 'A third-generation metal smith whose intricate brass and copper work celebrates the rich artistic heritage of Rajasthan.',
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: metal,
       instagram: '@rajivmetalart',
       featured: false
     }

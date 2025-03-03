@@ -2,6 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingBag, ChevronRight, Star } from 'lucide-react';
 
+import ceramic from "../assets/ceramic.jpg";
+import basket from "../assets/basket.jpeg";
+import scarf from "../assets/scarf.jpeg";
+import bowl from "../assets/bowl.jpeg";
+
 const FeaturedProducts = () => {
   const products = [
     {
@@ -9,7 +14,7 @@ const FeaturedProducts = () => {
       name: 'Handcrafted Ceramic Vase',
       price: 799,
       rating: 4.8,
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: ceramic,
       description: 'Unique ceramic vase with traditional patterns'
     },
     {
@@ -17,7 +22,7 @@ const FeaturedProducts = () => {
       name: 'Woven Jute Basket',
       price: 499,
       rating: 4.7,
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder:basket,
       description: 'Sustainable and stylish storage basket'
     },
     {
@@ -25,7 +30,7 @@ const FeaturedProducts = () => {
       name: 'Hand-painted Silk Scarf',
       price: 650,
       rating: 4.9,
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: scarf,
       description: 'Elegant scarf with artisan patterns'
     },
     {
@@ -33,7 +38,7 @@ const FeaturedProducts = () => {
       name: 'Carved Wooden Bowl',
       price: 385,
       rating: 4.6,
-      imagePlaceholder: '/api/placeholder/400/500',
+      imagePlaceholder: bowl,
       description: 'Natural wooden bowl with intricate detailing'
     }
   ];

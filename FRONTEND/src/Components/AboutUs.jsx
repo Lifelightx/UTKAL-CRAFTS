@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Globe, Award, Heart } from 'lucide-react';
 
+import artistAtWork from "../assets/artistAtWork.jpeg";
+
 const AboutUs = () => {
   const features = [
     {
@@ -51,7 +53,7 @@ const AboutUs = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 items-center mb-20">
+        <div className="grid md:grid-cols-2 gap-8 items-center mb-20 ">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -59,9 +61,9 @@ const AboutUs = () => {
             transition={{ duration: 0.7 }}
           >
             <img 
-              src="/api/placeholder/600/500" 
+              src = {artistAtWork}
               alt="Artisans at work" 
-              className="rounded-lg shadow-lg w-full h-auto"
+              className="rounded-2xl shadow-lg w-90 h-auto ml-40"
             />
           </motion.div>
           
