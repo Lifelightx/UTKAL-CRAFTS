@@ -207,7 +207,7 @@ const CartPage = () => {
                               <p className="text-sm text-stone-500 mb-2">
                                 Craft: {item.product.craftType} | Region: {item.product.region}
                               </p>
-                              <p className="text-amber-600 font-medium">${item.product.price.toFixed(2)}</p>
+                              <p className="text-amber-600 font-medium">₹{item.product.price.toFixed(2)}</p>
                             </div>
                             <div className="flex items-center mt-4 sm:mt-0">
                               <button
@@ -250,7 +250,7 @@ const CartPage = () => {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-stone-600">
                     <span>Subtotal</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>₹{totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-stone-600">
                     <span>Shipping</span>
@@ -265,7 +265,7 @@ const CartPage = () => {
                 <div className="border-t border-stone-200 pt-4 mb-6">
                   <div className="flex justify-between font-bold">
                     <span className="text-stone-800">Total</span>
-                    <span className="text-amber-600">${totalPrice.toFixed(2)}</span>
+                    <span className="text-amber-600">₹{totalPrice.toFixed(2)}</span>
                   </div>
                 </div>
                 
