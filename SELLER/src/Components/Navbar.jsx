@@ -41,7 +41,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-[#ffeee5] text-[#211202] sticky top-0 z-100 p-4 shadow-lg"
+      className="bg-[#ffffff] text-[#211202] sticky top-0 z-100 py-4 px-8 shadow-lg"
     >
       <div className="container mx-auto flex justify-between items-center">
         <motion.div 
@@ -59,7 +59,7 @@ const Navbar = () => {
         </motion.div>
         
         {!token ? (
-          <div className="flex space-x-4">
+          <div className="flex space-x-8">
             <motion.div whileHover="hover" whileTap="tap" variants={navItemVariants}>
               <Link to="/" className="flex items-center text-[#260e02] hover:text-[#d78500] transition">
                 <Home className="mr-1" /> Home

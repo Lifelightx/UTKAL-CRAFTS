@@ -32,10 +32,10 @@ const Hero = () => {
 
   return (
     <div 
-      className="relative h-[90vh] w-full bg-cover bg-center flex items-center justify-center"
+      className="relative h-[90vh] w-full bg-cover bg-[#ffffff] bg-center flex items-center justify-center"
       style={{
        
-        backgroundColor: '#ffffff',
+        
         backgroundBlendMode: 'multiply'
       }}
     >
@@ -74,7 +74,7 @@ const Hero = () => {
           variants={textVariants}
         >
           <button 
-            onClick={() => navigate('/seller/signup')}
+            onClick={() => navigate('/seller/register')}
             className="px-8 py-4 text-lg font-semibold text-gray-700 cursor-pointer bg-green-100 rounded-lg"
             
             
