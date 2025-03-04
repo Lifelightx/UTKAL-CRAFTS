@@ -1,13 +1,26 @@
 import React, { useState } from "react";
-import { User, LogIn, Menu, X, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
-//abc
+import { useNavigate } from "react-router-dom";
+import {
+  User,
+  LogIn,
+  Menu,
+  X,
+  Mail,
+  Phone,
+  Lock,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   const navItems = ["Home", "About", "Products", "Contact"];
 
   const openSignInModal = () => {
@@ -36,6 +49,52 @@ function Navbar() {
     setShowSignUpModal(false);
     setShowSignInModal(true);
   };
+  const navigate= useNavigate();
+
+  const signInFormik = useFormik({
+    initialValues: { email: "", password: "" },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+    }),
+    onSubmit: (values,{resetForm}) => {
+      console.log("Sign In Data:", values);
+      resetForm();
+      closeModals();
+      navigate("/");
+    },
+  });
+
+  const signUpFormik = useFormik({
+    initialValues: {
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Full Name is required"),
+      phone: Yup.string()
+        .matches(/^\d{10}$/, "Phone must be a 10-digit number")
+        .required("Phone is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
+    }),
+    onSubmit: (values,{resetForm}) => {
+      console.log("Sign Up Data:", values);
+      resetForm();
+      closeModals();
+      navigate("/");
+    },
+  });
 
   return (
     <>
@@ -43,7 +102,9 @@ function Navbar() {
         <div className="container mx-auto flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-[#bf4221]">Utkal Crafts</span>
+            <span className="text-2xl font-bold text-[#bf4221]">
+              Utkal Crafts
+            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -62,14 +123,14 @@ function Navbar() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button 
+            <button
               className="px-4 py-2 text-[#bf4221] border border-[#bf4221] rounded hover:bg-[#bf4221]/10 transition-colors duration-200 flex items-center"
               onClick={openSignInModal}
             >
               <LogIn size={16} className="mr-2" />
               Sign In
             </button>
-            <button 
+            <button
               className="px-4 py-2 bg-[#bf4221] text-white rounded hover:bg-[#a3361a] transition-colors duration-200 flex items-center"
               onClick={openSignUpModal}
             >
@@ -101,14 +162,14 @@ function Navbar() {
               </li>
             ))}
             <div className="mt-4 space-y-2">
-              <button 
+              <button
                 className="w-full px-4 py-2 text-[#bf4221] border border-[#bf4221] rounded hover:bg-[#bf4221]/10 transition-colors duration-200 flex items-center justify-center"
                 onClick={openSignInModal}
               >
                 <LogIn size={16} className="mr-2" />
                 Sign In
               </button>
-              <button 
+              <button
                 className="w-full px-4 py-2 bg-[#bf4221] text-white rounded hover:bg-[#a3361a] transition-colors duration-200 flex items-center justify-center"
                 onClick={openSignUpModal}
               >
@@ -126,17 +187,26 @@ function Navbar() {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-[#bf4221]">Sign In</h2>
-              <button 
+              <button
                 onClick={closeModals}
                 className="text-gray-500 hover:text-gray-700"
               >
                 <X size={24} />
               </button>
             </div>
-            
-            <form className="p-6 space-y-4">
+
+            <form
+              className="p-6 space-y-4"
+              onSubmit={signInFormik.handleSubmit}
+            >
+              {/* Email Input */}
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Mail size={16} className="text-gray-400" />
@@ -144,15 +214,30 @@ function Navbar() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
+                    onChange={signInFormik.handleChange}
+                    onBlur={signInFormik.handleBlur}
+                    value={signInFormik.values.email}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Your email"
-                    required
                   />
+                  {/* ✅ Show error only if field is touched */}
+                  {signInFormik.touched.email && signInFormik.errors.email && (
+                    <div className="text-red-500 text-sm mt-1 font-medium">
+                      {signInFormik.errors.email}
+                    </div>
+                  )}
                 </div>
               </div>
-              
+
+              {/* Password Input */}
               <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock size={16} className="text-gray-400" />
@@ -160,10 +245,22 @@ function Navbar() {
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
+                    name="password"
+                    onChange={signInFormik.handleChange}
+                    onBlur={signInFormik.handleBlur}
+                    value={signInFormik.values.password}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Your password"
-                    required
                   />
+                  {/* ✅ Show error only if field is touched */}
+                  {signInFormik.touched.password &&
+                    signInFormik.errors.password && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signInFormik.errors.password}
+                      </div>
+                    )}
+
+                  {/* Show/Hide Password Toggle */}
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -177,23 +274,8 @@ function Navbar() {
                   </button>
                 </div>
               </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-[#bf4221] focus:ring-[#bf4221] border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                    Remember me
-                  </label>
-                </div>
-                <a href="#" className="text-sm text-[#bf4221] hover:underline">
-                  Forgot password?
-                </a>
-              </div>
-              
+
+              {/* Sign In Button */}
               <button
                 type="submit"
                 className="w-full bg-[#bf4221] text-white py-2 px-4 rounded hover:bg-[#a3361a] transition-colors duration-200"
@@ -201,11 +283,11 @@ function Navbar() {
                 Sign In
               </button>
             </form>
-            
+
             <div className="px-6 pb-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-                <button 
+                <button
                   className="text-[#bf4221] hover:underline font-medium"
                   onClick={switchToSignUp}
                 >
@@ -223,17 +305,22 @@ function Navbar() {
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-[#bf4221]">Sign Up</h2>
-              <button 
+              <button
                 onClick={closeModals}
                 className="text-gray-500 hover:text-gray-700"
               >
                 <X size={24} />
               </button>
             </div>
-            
-            <form className="p-6 space-y-4">
+
+            <form className="p-6 space-y-4" onSubmit={signUpFormik.handleSubmit}>
               <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Full Name
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <User size={16} className="text-gray-400" />
@@ -241,15 +328,31 @@ function Navbar() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
+                    onChange={signUpFormik.handleChange}
+                    onBlur={signUpFormik.handleBlur}
+                    value={signUpFormik.values.name}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Your full name"
-                    required
+                    
                   />
+                  {signUpFormik.touched.name &&
+                    signUpFormik.errors.name && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signUpFormik.errors.name}
+                      </div>
+                    )}
+
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone Number
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Phone size={16} className="text-gray-400" />
@@ -257,15 +360,30 @@ function Navbar() {
                   <input
                     type="tel"
                     id="phone"
+                    name="phone"
+                    onChange={signUpFormik.handleChange}
+                    onBlur={signUpFormik.handleBlur}
+                    value={signUpFormik.values.phone}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Your phone number"
-                    required
+                    
                   />
+                  {signUpFormik.touched.phone &&
+                    signUpFormik.errors.phone && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signUpFormik.errors.phone}
+                      </div>
+                    )}
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700">Email</label>
+                <label
+                  htmlFor="signup-email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Mail size={16} className="text-gray-400" />
@@ -273,15 +391,30 @@ function Navbar() {
                   <input
                     type="email"
                     id="signup-email"
+                    name="email"
+                    onChange={signUpFormik.handleChange}
+                    onBlur={signUpFormik.handleBlur}
+                    value={signUpFormik.values.email}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Your email"
-                    required
+                    
                   />
+                  {signUpFormik.touched.email &&
+                    signUpFormik.errors.email && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signUpFormik.errors.email}
+                      </div>
+                    )}
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700">Password</label>
+                <label
+                  htmlFor="signup-password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock size={16} className="text-gray-400" />
@@ -289,10 +422,20 @@ function Navbar() {
                   <input
                     type={showPassword ? "text" : "password"}
                     id="signup-password"
+                    name="password"
+                    onBlur={signUpFormik.handleBlur}
+                    onChange={signUpFormik.handleChange}
+                    value={signUpFormik.values.password}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Create password"
-                    required
+                    
                   />
+                  {signUpFormik.touched.password &&
+                    signUpFormik.errors.password && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signUpFormik.errors.password}
+                      </div>
+                    )}
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -306,9 +449,14 @@ function Navbar() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <label
+                  htmlFor="confirm-password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Confirm Password
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock size={16} className="text-gray-400" />
@@ -316,10 +464,20 @@ function Navbar() {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirm-password"
+                    name="confirmPassword"
+                    onBlur={signUpFormik.handleBlur}
+                    onChange={signUpFormik.handleChange}
+                    value={signUpFormik.values.confirmPassword}
                     className="pl-10 w-full p-2 border border-gray-300 rounded focus:ring-[#bf4221] focus:border-[#bf4221]"
                     placeholder="Confirm password"
-                    required
+                    
                   />
+                  {signUpFormik.touched.confirmPassword &&
+                    signUpFormik.errors.confirmPassword && (
+                      <div className="text-red-500 text-sm mt-1 font-medium">
+                        {signUpFormik.errors.confirmPassword}
+                      </div>
+                    )}
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -333,7 +491,7 @@ function Navbar() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="flex items-center">
                 <input
                   id="terms"
@@ -341,7 +499,10 @@ function Navbar() {
                   className="h-4 w-4 text-[#bf4221] focus:ring-[#bf4221] border-gray-300 rounded"
                   required
                 />
-                <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="terms"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   I agree to the{" "}
                   <a href="#" className="text-[#bf4221] hover:underline">
                     Terms of Service
@@ -352,7 +513,7 @@ function Navbar() {
                   </a>
                 </label>
               </div>
-              
+
               <button
                 type="submit"
                 className="w-full bg-[#bf4221] text-white py-2 px-4 rounded hover:bg-[#a3361a] transition-colors duration-200"
@@ -360,11 +521,11 @@ function Navbar() {
                 Create Account
               </button>
             </form>
-            
+
             <div className="px-6 pb-6 text-center">
               <p className="text-sm text-gray-600">
                 Already have an account?{" "}
-                <button 
+                <button
                   className="text-[#bf4221] hover:underline font-medium"
                   onClick={switchToSignIn}
                 >
@@ -378,5 +539,4 @@ function Navbar() {
     </>
   );
 }
-
 export default Navbar;
