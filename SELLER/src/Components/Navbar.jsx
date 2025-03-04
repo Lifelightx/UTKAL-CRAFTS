@@ -16,8 +16,7 @@ import {
 import { StoreContext } from '../Context';
 
 const Navbar = () => {
-  const { token } = useContext(StoreContext);
-
+  
   const navItemVariants = {
     hover: { 
       scale: 1.05,
@@ -29,10 +28,11 @@ const Navbar = () => {
     }
   };
   const navigate = useNavigate()
+  const {token, setToken} = useContext(StoreContext)
   const handleLogout = () => {
     // console.log('logout');
     localStorage.removeItem('sellerToken')
-    
+    setToken("")
     navigate('/')
   };
 
@@ -61,19 +61,19 @@ const Navbar = () => {
         {!token ? (
           <div className="flex space-x-4">
             <motion.div whileHover="hover" whileTap="tap" variants={navItemVariants}>
-              <Link to="/" className="flex items-center text-[#260e02] hover:text-[#F2CC8F] transition">
+              <Link to="/" className="flex items-center text-[#260e02] hover:text-[#d78500] transition">
                 <Home className="mr-1" /> Home
               </Link>
             </motion.div>
             
             <motion.div whileHover="hover" whileTap="tap" variants={navItemVariants}>
-              <Link to="/seller/login" className="flex items-center text-[#F4F1DE] hover:text-[#F2CC8F] transition">
+              <Link to="/seller/login" className="flex items-center text-[#260e02] hover:text-[#d78500] transition">
                 <LogIn className="mr-1" /> Login
               </Link>
             </motion.div>
             
             <motion.div whileHover="hover" whileTap="tap" variants={navItemVariants}>
-              <Link to="/seller/register" className="flex items-center text-[#F4F1DE] hover:text-[#F2CC8F] transition">
+              <Link to="/seller/register" className="flex items-center text-[#260e02] hover:text-[#d78500] transition">
                 <UserPlus className="mr-1" /> Register
               </Link>
             </motion.div>
