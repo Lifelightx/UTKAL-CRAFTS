@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import konarkTemple from '../assets/konark.png'
+import bambooImg from '../assets/bamboo.png';
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -38,6 +39,15 @@ const Hero = () => {
         backgroundBlendMode: 'multiply'
       }}
     >
+       <img src={konarkTemple}
+        className='absolute h-100 left-0 bottom-0'
+        style={{
+            
+            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
+            
+        }}
+       alt="" /> 
+       
       <motion.div 
         className="text-center max-w-4xl px-4"
         variants={containerVariants}
@@ -45,15 +55,15 @@ const Hero = () => {
         animate="visible"
       >
         <motion.h1 
-          className="text-6xl font-bold mb-6"
-          style={{ color: '#3D405B' }}
+          className="text-6xl text-[#391300] font-caesar-dressing font-bold mb-6"
+          
           variants={textVariants}
         >
           Crafting Traditions of Odisha
         </motion.h1>
         
         <motion.p 
-          className="text-2xl mb-8"
+          className="text-2xl font-sourgummy mb-8"
           style={{ color: '#E07A5F' }}
           variants={textVariants}
         >
@@ -79,6 +89,20 @@ const Hero = () => {
           </button>
         </motion.div>
       </motion.div>
+      <img src={bambooImg}
+        className='h-100 absolute right-0 bottom-0'
+        style={{
+            
+            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
+        }}
+       alt="" />
+      {/* <img src={bambooImg}
+        className='h-100 absolute right-0 bottom-65 z-10'
+        style={{
+            
+            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
+        }}
+       alt="" /> */}
     </div>
   );
 };
