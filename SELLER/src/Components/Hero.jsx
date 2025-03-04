@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import konarkTemple from '../assets/konark.png'
+
 import bambooImg from '../assets/bamboo.png';
 const Hero = () => {
   const navigate = useNavigate();

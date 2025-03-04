@@ -1,17 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  PaletteIcon, 
-  GlobeIcon, 
-  DollarSignIcon, 
-  HeartHandshakeIcon, 
+  PaletteIcon,
+  GlobeIcon,
+  DollarSignIcon,
+  HeartHandshakeIcon,
   AwardIcon,
   CheckCircle2Icon
 } from 'lucide-react';
-
+import konarkTemple from '../assets/konark.png'
 function Advantage() {
-  const advantageVariants = {
-    hidden: { opacity: 0, y: 50 },
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 30 },
     visible: { 
       opacity: 1, 
       y: 0,
@@ -22,7 +22,7 @@ function Advantage() {
     }
   };
 
-  const advantageContainerVariants = {
+  const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -35,63 +35,66 @@ function Advantage() {
 
   const advantages = [
     {
-      icon: <PaletteIcon size={48} color="#E07A5F" />,
+      icon: <PaletteIcon size={40} strokeWidth={1.5} />,
       title: "Showcase Your Craft",
-      description: "Reach a global audience and share your unique artistic creations with the world."
+      description: "Amplify your artistic voice and reach a global audience passionate about traditional craftsmanship."
     },
     {
-      icon: <GlobeIcon size={48} color="#E07A5F" />,
+      icon: <GlobeIcon size={40} strokeWidth={1.5} />,
       title: "Global Marketplace",
-      description: "Connect with art lovers and collectors from around the globe who appreciate traditional craftsmanship."
+      description: "Connect with art collectors and enthusiasts who value authentic, handmade creations from Odisha."
     },
     {
-      icon: <DollarSignIcon size={48} color="#E07A5F" />,
+      icon: <DollarSignIcon size={40} strokeWidth={1.5} />,
       title: "Fair Compensation",
-      description: "Get fair pricing for your intricate work and receive direct support from art enthusiasts."
+      description: "Receive just recognition and compensation for your intricate, time-honored craft techniques."
     },
     {
-      icon: <HeartHandshakeIcon size={48} color="#E07A5F" />,
+      icon: <HeartHandshakeIcon size={40} strokeWidth={1.5} />,
       title: "Community Support",
-      description: "Join a supportive network of artisans who share your passion and preserve traditional crafts."
+      description: "Join a nurturing network dedicated to preserving and celebrating traditional artisan skills."
     }
   ];
 
   return (
-    <div 
-      className="min-h-screen bg-[#fffdf2] py-16 px-4"
-    >
+    <div className="bg-[#fffdf4] py-16 px-4">
       <motion.div 
-        className="container mx-auto"
+        className="container mx-auto max-w-6xl"
         initial="hidden"
         animate="visible"
-        variants={advantageContainerVariants}
+        variants={containerVariants}
       >
         <motion.h1 
-          className="text-5xl font-bold text-center mb-12"
-          style={{ color: '#3D405B' }}
-          variants={advantageVariants}
+          className="text-4xl md:text-5xl font-bold text-center mb-16 text-[#3D405B]"
+          variants={fadeInVariants}
         >
-          Why Join Our Handcraft Community?
+          Empowering Artisan Traditions
         </motion.h1>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Advantages Section */}
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Advantages Column */}
           <motion.div 
             className="space-y-6"
-            variants={advantageContainerVariants}
+            variants={containerVariants}
           >
             {advantages.map((advantage, index) => (
               <motion.div 
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md flex items-center space-x-6"
-                variants={advantageVariants}
-                whileHover={{ scale: 1.05 }}
+                className="bg-white p-6  border border-gray-200 flex items-start space-x-6 group"
+                variants={fadeInVariants}
+                
               >
-                <div>{advantage.icon}</div>
+                <div 
+                  className="p-3 rounded-lg bg-[#E07A5F]/10 group-hover:bg-[#E07A5F]/20 transition-colors"
+                >
+                  {React.cloneElement(advantage.icon, { 
+                    color: '#E07A5F', 
+                    className: 'group-hover:scale-110 transition-transform' 
+                  })}
+                </div>
                 <div>
                   <h3 
-                    className="text-2xl font-semibold mb-2"
-                    style={{ color: '#3D405B' }}
+                    className="text-xl font-semibold mb-2 text-[#3D405B]"
                   >
                     {advantage.title}
                   </h3>
@@ -101,67 +104,63 @@ function Advantage() {
             ))}
           </motion.div>
 
-          {/* Image Section */}
+          {/* Image Column */}
           <motion.div 
-            className="flex items-center justify-center"
-            variants={advantageVariants}
+            className="relative"
+            variants={fadeInVariants}
           >
-            <div 
-              className="w-full h-[600px] bg-cover bg-center rounded-lg shadow-lg"
-              style={{ 
-                backgroundImage: `url('/api/placeholder/800/600')`,
-                backgroundColor: '#81B29A',
-                backgroundBlendMode: 'multiply'
-              }}
-            >
-              <div className="h-full flex flex-col justify-end p-8 text-white">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.5 }}
-                >
-                  <div className="flex items-center space-x-4 mb-4">
-                    <AwardIcon size={32} />
-                    <span className="text-xl font-semibold">
-                      Certified Artisan Platform
-                    </span>
-                  </div>
-                  <p className="text-lg">
-                    Every artisan is verified and celebrated for their unique skills and cultural heritage.
-                  </p>
-                </motion.div>
-              </div>
+            <div className="overflow-hidden rounded-2xl shadow-2xl group">
+              <img 
+                src={konarkTemple} 
+                alt="Konark Temple" 
+                className="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <motion.div 
+                className="absolute bottom-0 left-0 right-0 bg-black/60 p-6 text-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <div className="flex items-center space-x-4 mb-2">
+                  <AwardIcon size={28} className="text-[#F2CC8F]" />
+                  <span className="text-lg font-semibold">
+                    Certified Artisan Platform
+                  </span>
+                </div>
+                <p className="text-gray-200">
+                  Every artisan is meticulously verified and celebrated for their unique cultural heritage and exceptional skills.
+                </p>
+              </motion.div>
             </div>
           </motion.div>
         </div>
 
         {/* Additional Benefits */}
         <motion.div 
-          className="mt-16 bg-white rounded-lg p-8 shadow-md"
-          variants={advantageVariants}
+          className="mt-16 bg-white rounded-2xl p-10 shadow-lg"
+          variants={fadeInVariants}
         >
           <h2 
-            className="text-3xl font-bold text-center mb-8"
-            style={{ color: '#3D405B' }}
+            className="text-3xl font-bold text-center mb-10 text-[#3D405B]"
           >
-            Additional Benefits
+            Your Journey of Artisan Excellence
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               "Zero Platform Fees",
               "Worldwide Shipping Support",
-              "Marketing Assistance",
-              "Skill Development Workshops",
-              "Cultural Preservation Initiative",
-              "Community Networking"
+              "Professional Marketing",
+              "Skill Enhancement Workshops",
+              "Cultural Preservation Program",
+              "Artisan Networking"
             ].map((benefit, index) => (
               <motion.div 
                 key={index} 
-                className="flex items-center space-x-3"
-                variants={advantageVariants}
+                className="flex items-center space-x-4 bg-[#81B29A]/10 p-4 rounded-lg"
+                variants={fadeInVariants}
               >
-                <CheckCircle2Icon size={24} color="#81B29A" />
-                <span className="text-lg">{benefit}</span>
+                <CheckCircle2Icon size={24} className="text-[#81B29A]" />
+                <span className="text-[#3D405B]">{benefit}</span>
               </motion.div>
             ))}
           </div>
