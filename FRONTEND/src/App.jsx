@@ -10,8 +10,10 @@ import CartPage from './Pages/Cart';
 import ProductDetailsPage from './Pages/ProductDetailsPage';
 import CheckoutPage from './Pages/CheckoutPage';
 import Products from './Pages/Products';
+
 function App() {
-  
+  const {user} = useContext(StoreContext)
+  console.log(user)
   return (
     <BrowserRouter>
     <Navbar/>
@@ -23,6 +25,7 @@ function App() {
         <Route path='/details' element={<ProductDetailsPage/>} />
         <Route path='/checkout' element={<CheckoutPage/>} />
         <Route path='/products' element={<Products/>} />
+        
       </Routes>
       <Footer/>
     </BrowserRouter>

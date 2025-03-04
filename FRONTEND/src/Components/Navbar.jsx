@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   User,
@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import { StoreContext } from "../Context";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,9 +22,9 @@ function Navbar() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const {url,token,setToken,setUser} = useContext(StoreContext)
   const navItems = ["Home", "About", "Products", "Contact"];
-
+  console.log(token)
   const openSignInModal = () => {
     setShowSignInModal(true);
     setShowSignUpModal(false);
@@ -61,6 +63,13 @@ function Navbar() {
     }),
     onSubmit: (values,{resetForm}) => {
       console.log("Sign In Data:", values);
+      axios.post(`${url}/api/auth/login`,values)
+      .then(res=> {
+        setToken(res.data.token)
+        localStorage.setItem("token",res.data.token)
+        setUser(res.data)
+      })
+      .catch(err =>console.log(err))
       resetForm();
       closeModals();
       navigate("/");
@@ -95,7 +104,12 @@ function Navbar() {
       navigate("/");
     },
   });
-
+  const handlLogout = ()=>{
+    localStorage.removeItem("token")
+    setToken("")
+    setUser(null)
+    navigate("/")
+  }
   return (
     <>
       <nav className="bg-white shadow-md sticky z-50 top-0 py-4 px-6">
@@ -122,6 +136,7 @@ function Navbar() {
           </ul>
 
           {/* Auth Buttons */}
+          {!token?
           <div className="hidden md:flex items-center space-x-4">
             <button
               className="px-4 py-2 text-[#bf4221] border border-[#bf4221] rounded hover:bg-[#bf4221]/10 transition-colors duration-200 flex items-center"
@@ -137,8 +152,14 @@ function Navbar() {
               <User size={16} className="mr-2" />
               Sign Up
             </button>
-          </div>
-
+          </div>:<button
+              className="px-4 py-2 bg-[#bf4221] text-white rounded hover:bg-[#a3361a] transition-colors duration-200 flex items-center"
+              onClick={handlLogout}
+            >
+              <User size={16} className="mr-2" />
+              Log out
+            </button>
+          }
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-gray-600"
@@ -183,7 +204,7 @@ function Navbar() {
 
       {/* Sign In Modal */}
       {showSignInModal && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex h-[90vh] items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex  items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
               <h2 className="text-2xl font-bold text-[#bf4221]">Sign In</h2>

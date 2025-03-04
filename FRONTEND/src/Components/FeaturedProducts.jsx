@@ -6,6 +6,7 @@ import ceramic from "../assets/ceramic.jpg";
 import basket from "../assets/basket.jpeg";
 import scarf from "../assets/scarf.jpeg";
 import bowl from "../assets/bowl.jpeg";
+import { useNavigate } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const products = [
@@ -42,7 +43,7 @@ const FeaturedProducts = () => {
       description: 'Natural wooden bowl with intricate detailing'
     }
   ];
-
+  const navigate = useNavigate()
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -115,15 +116,15 @@ const FeaturedProducts = () => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}
-                  className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center"
+                  className="absolute inset-0 bg-[rgba(0,0,0,0.1)] flex items-center justify-center"
                 >
-                  <motion.button
+                  {/* <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     className="bg-white text-amber-600 px-4 py-2 rounded-full font-medium flex items-center"
                   >
                     Quick View <ChevronRight size={16} />
-                  </motion.button>
+                  </motion.button> */}
                 </motion.div>
               </motion.div>
               <div className="p-5">
@@ -167,6 +168,7 @@ const FeaturedProducts = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={()=> navigate("/products")}
             className="bg-amber-600 text-white px-6 py-3 rounded-md font-medium inline-flex items-center"
           >
             View All Products <ChevronRight size={18} className="ml-1" />

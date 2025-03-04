@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, phone, role } = req.body;
+  const { name, email, password, phone } = req.body;
 
   // Check if user exists
   const userExists = await User.findOne({ email });
@@ -68,6 +68,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       res.status(401);
       throw new Error('Seller account is pending approval');
     }
+    
 
     res.json({
       _id: user._id,
