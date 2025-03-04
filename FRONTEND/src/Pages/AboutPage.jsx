@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Image, ShoppingBag, Hand, Heart } from "lucide-react";
 
+import handcraft1 from "../assets/handcraft1.jpeg"
+import handcraft2 from "../assets/handcraft2.jpeg"
+
 export default function AboutPage() {
   return (
     <motion.div
@@ -61,12 +64,12 @@ export default function AboutPage() {
         transition={{ delay: 0.5 }}
       >
         <img
-          src="/images/handcraft1.jpg"
+          src={handcraft1}
           alt="Handicraft 1"
           className="w-64 h-64 rounded-xl shadow-lg"
         />
         <img
-          src="/images/handcraft2.jpg"
+          src={handcraft2}
           alt="Handicraft 2"
           className="w-64 h-64 rounded-xl shadow-lg"
         />

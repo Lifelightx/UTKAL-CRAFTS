@@ -135,7 +135,7 @@ const Products = () => {
                 <p className="text-gray-600 text-sm mb-2 line-clamp-2">{product.description}</p>
                 
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-lg font-bold text-green-600">${product.price.toFixed(2)}</span>
+                  <span className="text-lg font-bold text-green-600">₹{product.price.toFixed(2)}</span>
                   <span className="text-sm text-gray-500">{product.region}</span>
                 </div>
                 
