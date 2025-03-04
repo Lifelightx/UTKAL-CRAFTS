@@ -5,7 +5,7 @@ import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import sarah from "../assets/sarah.jpeg";
 import dibya from "../assets/dibya.jpeg";
 import aisha from "../assets/aisha.jpeg";
-import thomas from "../assets/thomas.jpeg";
+import Abhisek from "../assets/thomas.jpeg";
 
 
 const Testimonials = () => {
@@ -13,7 +13,7 @@ const Testimonials = () => {
     {
       id: 1,
       name: 'Sarah Johnson',
-      location: 'New York, USA',
+      location: 'Maharastra, India',
       text: "The quality of craftsmanship is exceptional. I've purchased several items and each one has a special place in my home. Knowing the story behind each piece makes them even more meaningful.",
       rating: 5,
       imagePlaceholder: sarah
@@ -29,18 +29,18 @@ const Testimonials = () => {
     {
       id: 3,
       name: 'Aisha Patel',
-      location: 'London, UK',
+      location: 'Bhopal, India',
       text: "As someone who appreciates traditional craftsmanship, I'm thrilled to have found this marketplace. The ceramics I purchased are not only beautiful but functional works of art.",
       rating: 4,
       imagePlaceholder: aisha
     },
     {
       id: 4,
-      name: 'Thomas Weber',
-      location: 'Berlin, Germany',
+      name: 'Abhisek Malhan',
+      location: 'Hyderabad, India',
       text: 'The shipping was fast and the packaging was thoughtful and eco-friendly. The wooden sculptures exceeded my expectations in terms of detail and finish. Highly recommend!',
       rating: 5,
-      imagePlaceholder: thomas
+      imagePlaceholder: Abhisek
     }
   ];
 
