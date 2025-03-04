@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trash2, ShoppingBag, MinusCircle, PlusCircle, AlertCircle } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
     const [cart, setCart] = useState({
@@ -44,7 +45,7 @@ const CartPage = () => {
           }
         ]
       });
-      
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -124,7 +125,7 @@ const CartPage = () => {
 
   const handleCheckout = () => {
     // Navigate to checkout page or initiate checkout process
-    window.location.href = '/checkout';
+    navigate('/checkout');
   };
 
   if (loading) {

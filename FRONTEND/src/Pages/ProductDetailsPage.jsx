@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, ShoppingCart, ArrowLeft, Star, Clock, Info, Globe, Tag, Scale, Ruler } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Sample product data based on your schema
 const demoProduct = {
@@ -76,12 +77,12 @@ const ProductDetailsPage = () => {
     console.log(`Proceeding to checkout with ${quantity} of ${demoProduct.name}`);
     // This will be replaced with actual checkout functionality
   };
-
+  const navigate = useNavigate()
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
       {/* Navigation */}
       <div className="mb-6">
-        <button className="flex items-center text-gray-600 hover:text-gray-800">
+        <button onClick={()=> navigate('/products')} className="flex items-center text-gray-600 hover:text-gray-800">
           <ArrowLeft size={16} className="mr-2" />
           Back to Products
         </button>

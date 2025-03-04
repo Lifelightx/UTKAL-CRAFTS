@@ -8,7 +8,7 @@ function Navbar() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  const navItems = ["Home", "About", "Services", "Contact"];
+  const navItems = ["Home", "About", "Products", "Contact"];
 
   const openSignInModal = () => {
     setShowSignInModal(true);

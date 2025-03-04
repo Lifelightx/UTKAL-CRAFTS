@@ -5,9 +5,11 @@ import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import Contact from './Pages/Contact';
 import Home from './Pages/Home';
-import About from './Pages/About';
+import About from './Pages/AboutPage';
 import CartPage from './Pages/Cart';
 import ProductDetailsPage from './Pages/ProductDetailsPage';
+import CheckoutPage from './Pages/CheckoutPage';
+import Products from './Pages/Products';
 function App() {
   
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path='/cart' element={<CartPage/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path='/details' element={<ProductDetailsPage/>} />
+        <Route path='/checkout' element={<CheckoutPage/>} />
+        <Route path='/products' element={<Products/>} />
       </Routes>
       <Footer/>
     </BrowserRouter>
