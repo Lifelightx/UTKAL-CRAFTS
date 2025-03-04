@@ -39,14 +39,14 @@ const Hero = () => {
         backgroundBlendMode: 'multiply'
       }}
     >
-       <img src={konarkTemple}
+       {/* <img src={konarkTemple}
         className='absolute h-100 left-0 bottom-0'
         style={{
             
             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
             
         }}
-       alt="" /> 
+       alt="" />  */}
        
       <motion.div 
         className="text-center max-w-4xl px-4"
@@ -75,13 +75,8 @@ const Hero = () => {
         >
           <button 
             onClick={() => navigate('/seller/signup')}
-            className="px-8 py-4 text-lg font-semibold bg-amber-600 rounded-lg"
-            style={{
-              
-              color: 'white',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-              transition: 'transform 0.2s',
-            }}
+            className="px-8 py-4 text-lg font-semibold text-gray-700 cursor-pointer bg-green-100 rounded-lg"
+            
             
           >
             Get Started
@@ -96,13 +91,13 @@ const Hero = () => {
             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
         }}
        alt="" />
-      {/* <img src={bambooImg}
+      <img src={bambooImg}
         className='h-100 absolute right-0 bottom-65 z-10'
         style={{
             
             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.2))',
         }}
-       alt="" /> */}
+       alt="" />
     </div>
   );
 };

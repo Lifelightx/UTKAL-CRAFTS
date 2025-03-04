@@ -41,7 +41,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-[#ffeee5] text-[#211202] z-100 p-4 shadow-lg"
+      className="bg-[#ffeee5] text-[#211202] sticky top-0 z-100 p-4 shadow-lg"
     >
       <div className="container mx-auto flex justify-between items-center">
         <motion.div 
