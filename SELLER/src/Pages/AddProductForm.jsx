@@ -116,6 +116,7 @@ const AddProductForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: Implement product submission logic
+    
     console.log('Product Data:', productData);
   };
 
