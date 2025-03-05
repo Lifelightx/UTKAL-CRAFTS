@@ -8,19 +8,19 @@ import {
   updateSellerAddress,
   deleteSellerAddress,
 } from '../controllers/seller.auth.controller.js';
-import { protect } from '../middleware/seller.auth.js';
+import { protectSeller } from '../middleware/seller.auth.js';
 
 const router = express.Router();
 
 router.post('/register', registerSeller);
 router.post('/login', loginSeller);
 router.route('/profile')
-  .get(protect, getSellerProfile)
-  .put(protect, updateSellerProfile);
+  .get(protectSeller, getSellerProfile)
+  .put(protectSeller, updateSellerProfile);
 router.route('/address')
-  .post(protect, addSellerAddress);
+  .post(protectSeller, addSellerAddress);
 router.route('/address/:id')
-  .put(protect, updateSellerAddress)
-  .delete(protect, deleteSellerAddress);
+  .put(protectSeller, updateSellerAddress)
+  .delete(protectSeller, deleteSellerAddress);
 
 export default router;

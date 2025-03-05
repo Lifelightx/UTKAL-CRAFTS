@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import Seller from '../models/seller.model.js';
 
 // Protect routes - verify token
-export const protect = asyncHandler(async (req, res, next) => {
+export const protectSeller = asyncHandler(async (req, res, next) => {
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -16,7 +16,8 @@ export const protect = asyncHandler(async (req, res, next) => {
 
       // Get seller from the token
       req.seller = await Seller.findById(decoded.id).select('-password');
-
+      // console.log(req.seller)
+      
       next();
     } catch (error) {
       console.error(error);
@@ -32,17 +33,11 @@ export const protect = asyncHandler(async (req, res, next) => {
 });
 
 // Seller middleware
-export const seller = (req, res, next) => {
-  if (req.seller && req.seller.role === 'seller') {
-    next();
-  } else {
-    res.status(403);
-    throw new Error('Not authorized as a seller');
-  }
-};
+
 
 // Verify seller is approved
 export const approvedSeller = (req, res, next) => {
+  
   if (req.seller && req.seller.role === 'seller' && req.seller.isApproved) {
     next();
   } else {
