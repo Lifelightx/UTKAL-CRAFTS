@@ -5,7 +5,7 @@ const productSchema = mongoose.Schema(
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: 'Seller',
     },
     name: {
       type: String,
