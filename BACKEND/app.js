@@ -7,6 +7,8 @@ import { config } from 'dotenv';
 import connectDB from './config/database.js';
 import errorHandler from './middleware/errorHandler.js';
 import { notFound } from './middleware/notFound.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Routes
 import authRoutes from './routes/auth.routes.js';
@@ -21,6 +23,12 @@ const app = express();
 
 // Connect to MongoDB
 connectDB();
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/uploads', express.static(path.join(__dirname, '/uploads/images')));
 
 // Middleware
 app.use(helmet()); // Security headers
