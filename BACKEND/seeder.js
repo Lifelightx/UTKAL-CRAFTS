@@ -8,7 +8,7 @@ import Review from './models/review.model.js';
 import Cart from './models/cart.model.js';
 import Wishlist from './models/wishlist.model.js';
 import connectDB from './config/database.js';
-
+import Seller from './models/seller.model.js';
 dotenv.config();
 
 connectDB();
@@ -35,13 +35,21 @@ const importData = async () => {
     });
 
     // Create seller user
-    const sellerUser = await User.create({
+    const sellerUser = await Seller.create({
       name: 'Seller User',
       email: 'seller@example.com',
       password: 'password123',
       phone: '9876543210',
       role: 'seller',
       isApproved: true,
+      businessName:"Siadimal",
+      businessAddress:{
+        street: "Siadimal",
+        city: "Raj-Nilgiri",
+        state: "Balasore",
+        country: "Odisha",
+        postalCode: "752001"
+      }
     });
 
     // Create regular user

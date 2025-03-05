@@ -12,7 +12,7 @@ import { notFound } from './middleware/notFound.js';
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import cartRoutes from './routes/cart.routes.js';
-
+import sellerRoutes from './routes/seller.auth.routes.js'
 // Load environment variables
 config();
 
@@ -34,6 +34,7 @@ app.use(compression()); // Compress responses
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/seller/', sellerRoutes)
 
 // Health check endpoint
 app.get('/health', (req, res) => {

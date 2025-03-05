@@ -7,8 +7,8 @@ import {
   addSellerAddress,
   updateSellerAddress,
   deleteSellerAddress,
-} from '../controllers/seller.controller.js';
-import { protect } from '../middleware/sellerAuth.js';
+} from '../controllers/seller.auth.controller.js';
+import { protect } from '../middleware/seller.auth.js';
 
 const router = express.Router();
 
