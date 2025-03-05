@@ -5,6 +5,7 @@ import Home from './Pages/Home'
 import Services from './Pages/Services'
 import About from './Pages/About'
 import SellerRegistration from './Pages/SellerRegistration'
+import Login from './Pages/LogIn'
 function App() {
   
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path='/seller/register' element={<SellerRegistration />} />
+        <Route path='/seller/login' element={<Login />} />
       </Routes>
     <Footer/>
     </BrowserRouter>
