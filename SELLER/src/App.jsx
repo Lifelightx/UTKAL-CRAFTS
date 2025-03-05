@@ -6,6 +6,7 @@ import Services from './Pages/Services'
 import About from './Pages/About'
 import SellerRegistration from './Pages/SellerRegistration'
 import Login from './Pages/LogIn'
+import AddProductForm from './Pages/AddProductForm'
 function App() {
   
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path='/seller/register' element={<SellerRegistration />} />
         <Route path='/seller/login' element={<Login />} />
+        <Route path='/seller/dashboard' element={<AddProductForm/>} />
       </Routes>
     <Footer/>
     </BrowserRouter>
