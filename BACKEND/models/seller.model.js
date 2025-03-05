@@ -45,6 +45,10 @@ const sellerSchema = mongoose.Schema(
       type: String,
       default: '',
     },
+    role:{
+      type: String,
+      default: 'seller',  // Role of seller is set to seller by default.
+    },
     isActive: {
       type: Boolean,
       default: true,
