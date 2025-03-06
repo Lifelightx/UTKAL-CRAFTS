@@ -1,48 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, ShoppingCart, ArrowLeft, Star, Clock, Info, Globe, Tag, Scale, Ruler } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-// Sample product data based on your schema
-const demoProduct = {
-  _id: "65f3d24a8b14d987654321",
-  name: "Handcrafted Ceramic Vase",
-  description: "This beautiful handcrafted ceramic vase is made using traditional techniques passed down through generations. Each piece is unique with subtle variations in color and texture, showcasing the skilled craftsmanship of artisans from the region.",
-  price: 79.99,
-  images: [
-    "/api/placeholder/500/500",
-    "/api/placeholder/500/500",
-    "/api/placeholder/500/500",
-  ],
-  category: {
-    _id: "65f3d24a8b14d123456789",
-    name: "Home Decor"
-  },
-  countInStock: 12,
-  rating: 4.7,
-  numReviews: 28,
-  isFeatured: true,
-  isActive: true,
-  materials: ["Clay", "Natural Glazes", "Organic Pigments"],
-  dimensions: {
-    length: 25,
-    width: 25,
-    height: 30,
-    unit: "cm"
-  },
-  weight: {
-    value: 1200,
-    unit: "g"
-  },
-  tags: ["Handmade", "Sustainable", "Traditional", "Home Decor"],
-  craftType: "Pottery",
-  region: "Northern Thailand",
-  seller: {
-    _id: "65f3d24a8b14d567890123",
-    name: "ArtisanCollective",
-    rating: 4.9
-  },
-  createdAt: "2024-12-15T08:30:00.000Z"
-};
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useContext } from 'react';
+import { StoreContext } from '../Context';
 
 // Helper function to format dates
 const formatDate = (dateString) => {
@@ -53,36 +14,81 @@ const formatDate = (dateString) => {
 const ProductDetailsPage = () => {
   const [mainImage, setMainImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-
-  // This function will be replaced with actual API call when backend is ready
-  const fetchProduct = async (id) => {
-    // Simulating API fetch delay
-    console.log(`Fetching product with ID: ${id}`);
-    return new Promise(resolve => setTimeout(() => resolve(demoProduct), 300));
-  };
-
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const { id } = useParams(); // Get product ID from URL parameters
+  const navigate = useNavigate();
+  const {url} = useContext(StoreContext)
+  // Fetch product data when component mounts
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true);
+        // Replace with your actual API endpoint
+        const response = await axios.get(`${url}/api/products/${id}`);
+        setProduct(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.error('Failed to fetch product:', err);
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProductData();
+  }, [id]);
+  
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    if (value > 0 && value <= demoProduct.countInStock) {
+    if (value > 0 && product && value <= product.countInStock) {
       setQuantity(value);
     }
   };
 
   const handleAddToCart = () => {
-    console.log(`Added ${quantity} of ${demoProduct.name} to cart`);
+    console.log(`Added ${quantity} of ${product.name} to cart`);
     // This will be replaced with actual cart functionality
   };
 
   const handleBuyNow = () => {
-    console.log(`Proceeding to checkout with ${quantity} of ${demoProduct.name}`);
+    console.log(`Proceeding to checkout with ${quantity} of ${product.name}`);
     // This will be replaced with actual checkout functionality
   };
-  const navigate = useNavigate()
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8 bg-white flex justify-center items-center h-96">
+        <p className="text-xl">Loading product details...</p>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error || !product) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
+        <div className="mb-6">
+          <button onClick={() => navigate('/products')} className="flex items-center text-gray-600 hover:text-gray-800">
+            <ArrowLeft size={16} className="mr-2" />
+            Back to Products
+          </button>
+        </div>
+        <div className="text-center py-12">
+          <p className="text-xl text-red-600">Error loading product: {error || "Product not found"}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 bg-white">
       {/* Navigation */}
       <div className="mb-6">
-        <button onClick={()=> navigate('/products')} className="flex items-center text-gray-600 hover:text-gray-800">
+        <button onClick={() => navigate('/products')} className="flex items-center text-gray-600 hover:text-gray-800">
           <ArrowLeft size={16} className="mr-2" />
           Back to Products
         </button>
@@ -94,21 +100,21 @@ const ProductDetailsPage = () => {
         <div className="space-y-4">
           <div className="bg-gray-100 rounded-lg overflow-hidden h-96 flex items-center justify-center">
             <img 
-              src={demoProduct.images[mainImage]} 
-              alt={demoProduct.name} 
+              src={`${url}${product.images[mainImage]}`} 
+              alt={product.name} 
               className="object-contain h-full w-full" 
             />
           </div>
           <div className="flex space-x-2 overflow-x-auto">
-            {demoProduct.images.map((img, index) => (
+            {product.images.map((img, index) => (
               <div 
                 key={index} 
                 className={`w-20 h-20 rounded-md overflow-hidden cursor-pointer border-2 ${mainImage === index ? 'border-blue-500' : 'border-transparent'}`}
                 onClick={() => setMainImage(index)}
-              >
+              > {console.log(img)}
                 <img 
-                  src={img} 
-                  alt={`${demoProduct.name} thumbnail ${index + 1}`} 
+                  src={`${url}${img}`} 
+                  alt={`${product.name} thumbnail ${index + 1}`} 
                   className="object-cover w-full h-full" 
                 />
               </div>
@@ -119,8 +125,8 @@ const ProductDetailsPage = () => {
         {/* Product Details */}
         <div className="space-y-6">
           <div>
-            <div className="text-sm text-gray-500 mb-1">{demoProduct.category.name}</div>
-            <h1 className="text-3xl font-bold text-gray-900">{demoProduct.name}</h1>
+            <div className="text-sm text-gray-500 mb-1">{product.category.name}</div>
+            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
             
             <div className="flex items-center mt-2">
               <div className="flex items-center">
@@ -128,49 +134,46 @@ const ProductDetailsPage = () => {
                   <Star 
                     key={i} 
                     size={16} 
-                    className={i < Math.floor(demoProduct.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}
+                    className={i < Math.floor(product.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}
                   />
                 ))}
-                {/* {demoProduct.rating % 1 > 0 && (
-                  <Star size={16} className="text-yellow-400 fill-yellow-400" />
-                )} */}
               </div>
-              <span className="ml-2 text-sm text-gray-600">{demoProduct.rating} ({demoProduct.numReviews} reviews)</span>
+              <span className="ml-2 text-sm text-gray-600">{product.rating} ({product.numReviews} reviews)</span>
             </div>
           </div>
 
-          <div className="text-2xl font-bold text-gray-900">${demoProduct.price.toFixed(2)}</div>
+          <div className="text-2xl font-bold text-gray-900">${product.price.toFixed(2)}</div>
 
           <div className="border-t border-[#a76130] border-b py-4">
             <div className="text-sm font-medium text-gray-500 mb-2">Description</div>
-            <p className="text-gray-700">{demoProduct.description}</p>
+            <p className="text-gray-700">{product.description}</p>
           </div>
 
           <div className="flex flex-col space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Clock size={16} className="text-gray-500 mr-2" />
-                <span className="text-sm text-gray-700">Added on {formatDate(demoProduct.createdAt)}</span>
+                <span className="text-sm text-gray-700">Added on {formatDate(product.createdAt)}</span>
               </div>
-              <div className={`px-2 py-1 rounded text-xs font-medium ${demoProduct.countInStock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {demoProduct.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
+              <div className={`px-2 py-1 rounded text-xs font-medium ${product.countInStock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
               </div>
             </div>
 
-            {demoProduct.countInStock > 0 && (
+            {product.countInStock > 0 && (
               <div className="flex items-center space-x-2">
                 <label htmlFor="quantity" className="text-sm font-medium text-gray-700">Quantity:</label>
                 <input
                   type="number"
                   id="quantity"
                   min="1"
-                  max={demoProduct.countInStock}
+                  max={product.countInStock}
                   value={quantity}
                   onChange={handleQuantityChange}
                   className="w-16 py-1 px-2 border border-gray-300 rounded text-center"
                 />
                 <span className="text-sm text-gray-500">
-                  ({demoProduct.countInStock} available)
+                  ({product.countInStock} available)
                 </span>
               </div>
             )}
@@ -178,7 +181,7 @@ const ProductDetailsPage = () => {
             <div className="flex space-x-4">
               <button
                 onClick={handleAddToCart}
-                disabled={demoProduct.countInStock === 0}
+                disabled={product.countInStock === 0}
                 className="flex-1 bg-[#bf4221] text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center hover:bg-[#a3361a] disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 <ShoppingCart size={18} className="mr-2" />
@@ -186,7 +189,7 @@ const ProductDetailsPage = () => {
               </button>
               <button
                 onClick={handleBuyNow}
-                disabled={demoProduct.countInStock === 0}
+                disabled={product.countInStock === 0}
                 className="flex-1 bg-gray-800 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center hover:bg-gray-900 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Buy Now
@@ -208,7 +211,7 @@ const ProductDetailsPage = () => {
               <Info size={18} className="text-gray-500 mr-3 mt-1" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Materials</h3>
-                <p className="text-gray-700">{demoProduct.materials.join(', ')}</p>
+                <p className="text-gray-700">{product.materials.join(', ')}</p>
               </div>
             </div>
             <div className="flex items-start">
@@ -216,7 +219,7 @@ const ProductDetailsPage = () => {
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Dimensions</h3>
                 <p className="text-gray-700">
-                  {demoProduct.dimensions.length} × {demoProduct.dimensions.width} × {demoProduct.dimensions.height} {demoProduct.dimensions.unit}
+                  {product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height} {product.dimensions.unit}
                 </p>
               </div>
             </div>
@@ -224,7 +227,7 @@ const ProductDetailsPage = () => {
               <Scale size={18} className="text-gray-500 mr-3 mt-1" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Weight</h3>
-                <p className="text-gray-700">{demoProduct.weight.value} {demoProduct.weight.unit}</p>
+                <p className="text-gray-700">{product.weight.value} {product.weight.unit}</p>
               </div>
             </div>
           </div>
@@ -233,14 +236,14 @@ const ProductDetailsPage = () => {
               <Globe size={18} className="text-gray-500 mr-3 mt-1" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Region</h3>
-                <p className="text-gray-700">{demoProduct.region}</p>
+                <p className="text-gray-700">{product.region}</p>
               </div>
             </div>
             <div className="flex items-start">
               <Info size={18} className="text-gray-500 mr-3 mt-1" />
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Craft Type</h3>
-                <p className="text-gray-700">{demoProduct.craftType}</p>
+                <p className="text-gray-700">{product.craftType}</p>
               </div>
             </div>
             <div className="flex items-start">
@@ -248,7 +251,7 @@ const ProductDetailsPage = () => {
               <div>
                 <h3 className="text-sm font-medium text-gray-500">Tags</h3>
                 <div className="flex flex-wrap gap-1 mt-1">
-                  {demoProduct.tags.map((tag, index) => (
+                  {product.tags.map((tag, index) => (
                     <span key={index} className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
                       {tag}
                     </span>
@@ -265,13 +268,13 @@ const ProductDetailsPage = () => {
         <h2 className="text-xl font-bold text-gray-900 mb-4">Seller Information</h2>
         <div className="flex items-center">
           <div className="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center text-gray-500 mr-4">
-            {demoProduct.seller.name.charAt(0)}
+            {product.seller.name.charAt(0)}
           </div>
           <div>
-            <h3 className="font-medium">{demoProduct.seller.name}</h3>
+            <h3 className="font-medium">{product.seller.name}</h3>
             <div className="flex items-center mt-1">
               <Star size={14} className="text-yellow-400 fill-yellow-400 mr-1" />
-              <span className="text-sm text-gray-600">{demoProduct.seller.rating} Seller Rating</span>
+              <span className="text-sm text-gray-600">{product.seller.rating} Seller Rating</span>
             </div>
           </div>
           <button className="ml-auto bg-white text-[#8b5d3b] border border-[#8b5d3b] px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50">
