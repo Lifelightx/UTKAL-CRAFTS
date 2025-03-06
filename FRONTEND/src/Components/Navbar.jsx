@@ -99,6 +99,9 @@ function Navbar() {
     }),
     onSubmit: (values,{resetForm}) => {
       console.log("Sign Up Data:", values);
+      axios.post(`${url}/api/auth/register`, values)
+      .then( res =>  console.log(res))
+      .catch(err => console.log(err))
       resetForm();
       closeModals();
       navigate("/");

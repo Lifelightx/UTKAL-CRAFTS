@@ -13,11 +13,14 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, phone } = req.body;
-
+  const { name, email, password, phone, confirmPassword } = req.body;
+  console.log(req.body);
   // Check if user exists
   const userExists = await User.findOne({ email });
-
+  if (password !== confirmPassword){
+    res.status(400);
+    throw new Error('Passwords do not match');
+  }
   if (userExists) {
     res.status(400);
     throw new Error('User already exists');
