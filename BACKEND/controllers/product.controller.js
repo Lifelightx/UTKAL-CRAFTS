@@ -94,16 +94,16 @@ export const createProduct = asyncHandler(async (req, res) => {
   } = req.body;
 
   // Verify category exists
-  const categoryExists = await Category.findById(category);
-  if (!categoryExists) {
-    res.status(400);
-    throw new Error('Invalid category');
-  }
+  // const categoryExists = await Category.findById(category);
+  // if (!categoryExists) {
+  //   res.status(400);
+  //   throw new Error('Invalid category');
+  // }
 
   const images = processImages(req.files);
-
+  console.log()
   const product = new Product({
-    seller: req.user._id,
+    seller: req.seller._id,
     name,
     description,
     price,
