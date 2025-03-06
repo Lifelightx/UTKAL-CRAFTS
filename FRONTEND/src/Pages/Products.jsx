@@ -1,88 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
+import { useContext } from 'react';
+import { StoreContext } from '../Context';
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const {url} = useContext(StoreContext)
   useEffect(() => {
+
     // This would be replaced with an actual API call when backend is ready
     const fetchProducts = async () => {
       try {
         // Mock API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        axios.get(`${url}/api/products`)
+        .then((response) =>{ setProducts(response.data.products)
+          console.log(response.data)
+        })
+        .catch((error) => console.error(error))
         
-        // Dummy data based on your schema
-        const dummyProducts = [
-          {
-            _id: '1',
-            name: 'Hand-woven Bamboo Basket',
-            description: 'Traditional hand-woven basket made from sustainable bamboo materials',
-            price: 45.99,
-            images: ['/api/placeholder/300/300'],
-            rating: 4.5,
-            numReviews: 12,
-            craftType: 'Weaving',
-            region: 'Southeast Asia'
-          },
-          {
-            _id: '2',
-            name: 'Ceramic Tea Set',
-            description: 'Handcrafted ceramic tea set with traditional patterns',
-            price: 89.99,
-            images: ['/api/placeholder/300/300'],
-            rating: 5.0,
-            numReviews: 24,
-            craftType: 'Pottery',
-            region: 'East Asia'
-          },
-          {
-            _id: '3',
-            name: 'Embroidered Wall Hanging',
-            description: 'Beautiful hand-embroidered wall decoration with floral patterns',
-            price: 129.99,
-            images: ['/api/placeholder/300/300'], 
-            rating: 4.8,
-            numReviews: 9,
-            craftType: 'Embroidery',
-            region: 'South Asia'
-          },
-          {
-            _id: '4',
-            name: 'Carved Wooden Sculpture',
-            description: 'Intricately carved wooden sculpture depicting local wildlife',
-            price: 199.99,
-            images: ['/api/placeholder/300/300'],
-            rating: 4.9,
-            numReviews: 7,
-            craftType: 'Wood Carving',
-            region: 'Africa'
-          },
-          {
-            _id: '5',
-            name: 'Hand-painted Silk Scarf',
-            description: 'Elegant hand-painted silk scarf with traditional motifs',
-            price: 79.99,
-            images: ['/api/placeholder/300/300'],
-            rating: 4.7,
-            numReviews: 15,
-            craftType: 'Silk Painting',
-            region: 'East Asia'
-          },
-          {
-            _id: '6',
-            name: 'Handmade Leather Journal',
-            description: 'Rustic leather journal with handmade paper pages',
-            price: 35.99,
-            images: ['/api/placeholder/300/300'],
-            rating: 4.6,
-            numReviews: 18,
-            craftType: 'Leatherwork',
-            region: 'Europe'
-          }
-        ];
-        
-        setProducts(dummyProducts);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -113,11 +49,11 @@ const Products = () => {
           <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <Link to={`/details/${product._id}`} className="block">
               <img 
-                src={product.images[0]} 
+                src={`${url}${product.images[0]}`} 
                 alt={product.name} 
                 className="w-full h-48 object-cover"
               />
-              
+              {console.log(product.images[0])}
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-1">{product.name}</h2>
                 

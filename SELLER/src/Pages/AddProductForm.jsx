@@ -231,7 +231,7 @@ const AddProductForm = () => {
     <div className="container mx-auto px-24 py-10 bg-gray-50 min-h-screen">
       <form 
         onSubmit={handleSubmit} 
-        className="bg-white shadow-lg rounded-lg p-8 space-y-6"
+        className="bg-white shadow-lg rounded-lg px-16 py-6 space-y-6"
       >
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Add New Product
