@@ -42,21 +42,4 @@ export const admin = (req, res, next) => {
 };
 
 // Seller middleware
-export const seller = (req, res, next) => {
-  if (req.user && req.user.role === 'seller') {
-    next();
-  } else {
-    res.status(403);
-    throw new Error('Not authorized as a seller');
-  }
-};
 
-// Verify seller is approved
-export const approvedSeller = (req, res, next) => {
-  if (req.user && req.user.role === 'seller' && req.user.isApproved) {
-    next();
-  } else {
-    res.status(403);
-    throw new Error('Seller account not approved yet');
-  }
-};

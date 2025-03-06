@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import { 
   Save, 
   Upload, 
   PlusCircle, 
   Trash2, 
   Tag, 
-  
-  IndianRupee,
+  DollarSign,
   TextSelection, 
   Ruler, 
   Box, 
   Globe 
 } from 'lucide-react';
-
+import { StoreContext } from '../Context';
 const AddProductForm = () => {
   const [productData, setProductData] = useState({
     name: '',
     description: '',
     price: '',
     images: [],
-    category: '',
+    category: '', 
     countInStock: '',
     materials: [],
     dimensions: {
@@ -38,9 +38,13 @@ const AddProductForm = () => {
     isFeatured: false,
     isActive: true
   });
-
+  const {url, token} = useContext(StoreContext)
+  
   const [newTag, setNewTag] = useState('');
   const [newMaterial, setNewMaterial] = useState('');
+  const [imageFiles, setImageFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -65,6 +69,17 @@ const AddProductForm = () => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
+    
+    // Limit image uploads to 5
+    if (productData.images.length + files.length > 5) {
+      alert('You can upload a maximum of 5 images');
+      return;
+    }
+    
+    // Store actual files for upload
+    setImageFiles(prev => [...prev, ...files]);
+
+    // Create preview URLs
     const imageUrls = files.map(file => URL.createObjectURL(file));
     setProductData(prev => ({
       ...prev,
@@ -73,27 +88,31 @@ const AddProductForm = () => {
   };
 
   const removeImage = (index) => {
+    // Remove from both image URLs and actual files
     setProductData(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const addTag = () => {
-    if (newTag && !productData.tags.includes(newTag)) {
+    const trimmedTag = newTag.trim();
+    if (trimmedTag && !productData.tags.includes(trimmedTag)) {
       setProductData(prev => ({
         ...prev,
-        tags: [...prev.tags, newTag]
+        tags: [...prev.tags, trimmedTag]
       }));
       setNewTag('');
     }
   };
 
   const addMaterial = () => {
-    if (newMaterial && !productData.materials.includes(newMaterial)) {
+    const trimmedMaterial = newMaterial.trim();
+    if (trimmedMaterial && !productData.materials.includes(trimmedMaterial)) {
       setProductData(prev => ({
         ...prev,
-        materials: [...prev.materials, newMaterial]
+        materials: [...prev.materials, trimmedMaterial]
       }));
       setNewMaterial('');
     }
@@ -113,11 +132,99 @@ const AddProductForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement product submission logic
-    
-    console.log('Product Data:', productData);
+    setLoading(true);
+    setError(null);
+
+    // Additional client-side validation
+    if (imageFiles.length === 0) {
+      setError('Please upload at least one image');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Create FormData for multipart upload
+      const formData = new FormData();
+
+      // Append text fields
+      formData.append('name', productData.name);
+      formData.append('description', productData.description);
+      formData.append('price', productData.price);
+      formData.append('category', productData.category);
+      formData.append('countInStock', productData.countInStock);
+      formData.append('craftType', productData.craftType);
+      formData.append('region', productData.region);
+      formData.append('isFeatured', productData.isFeatured);
+      formData.append('isActive', productData.isActive);
+
+      // Append arrays
+      productData.materials.forEach(material => 
+        formData.append('materials', material)
+      );
+      productData.tags.forEach(tag => 
+        formData.append('tags', tag)
+      );
+
+      // Append nested objects
+      formData.append('dimensions', JSON.stringify(productData.dimensions));
+      formData.append('weight', JSON.stringify(productData.weight));
+
+      // Append image files
+      imageFiles.forEach(file => {
+        formData.append('images', file);
+      });
+
+      // Send to backend
+      
+      const response = await axios.post(`${url}/api/products`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          // Include Authorization header if using JWT
+           'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // Reset form or handle success
+      console.log('Product created:', response.data);
+      alert('Product created successfully!');
+      
+      // Reset form to initial state
+      setProductData({
+        name: '',
+        description: '',
+        price: '',
+        images: [],
+        category: '',
+        countInStock: '',
+        materials: [],
+        dimensions: {
+          length: '',
+          width: '',
+          height: '',
+          unit: 'cm'
+        },
+        weight: {
+          value: '',
+          unit: 'g'
+        },
+        tags: [],
+        craftType: '',
+        region: '',
+        isFeatured: false,
+        isActive: true
+      });
+      setImageFiles([]);
+      setNewTag('');
+      setNewMaterial('');
+
+    } catch (err) {
+      console.error('Error creating product:', err.response?.data || err.message);
+      setError(err.response?.data?.message || 'Failed to create product');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,10 +237,15 @@ const AddProductForm = () => {
           Add New Product
         </h2>
 
-        {/* Basic Product Information */}
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            {error}
+          </div>
+        )}
+          <div className="grid md:grid-cols-2 gap-6">
           <div className="form-group">
-            <label className="flex font-semibold items-center mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <TextSelection className="mr-2 text-blue-500" />
               Product Name
             </label>
@@ -149,8 +261,8 @@ const AddProductForm = () => {
           </div>
 
           <div className="form-group">
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
-              <IndianRupee className="mr-2 text-green-500" />
+            <label className="flex items-center mb-2 text-gray-700">
+              <DollarSign className="mr-2 text-green-500" />
               Price
             </label>
             <input
@@ -169,7 +281,7 @@ const AddProductForm = () => {
 
         {/* Description */}
         <div className="form-group">
-          <label className="flex items-center font-semibold mb-2 text-gray-700">
+          <label className="flex items-center mb-2 text-gray-700">
             <TextSelection className="mr-2 text-purple-500" />
             Description
           </label>
@@ -186,7 +298,7 @@ const AddProductForm = () => {
 
         {/* Images Upload */}
         <div className="form-group">
-          <label className="flex items-center font-semibold mb-2 text-gray-700">
+          <label className="flex items-center mb-2 text-gray-700">
             <Upload className="mr-2 text-indigo-500" />
             Product Images
           </label>
@@ -201,7 +313,7 @@ const AddProductForm = () => {
             />
             <label 
               htmlFor="image-upload" 
-              className="flex items-center font-semibold px-4 py-2 bg-indigo-500 text-white rounded-md cursor-pointer hover:bg-indigo-600"
+              className="flex items-center px-4 py-2 bg-indigo-500 text-white rounded-md cursor-pointer hover:bg-indigo-600"
             >
               <PlusCircle className="mr-2" /> Upload Images
             </label>
@@ -229,7 +341,7 @@ const AddProductForm = () => {
         {/* Advanced Details */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <Box className="mr-2 text-teal-500" />
               Count in Stock
             </label>
@@ -246,7 +358,7 @@ const AddProductForm = () => {
           </div>
 
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <Globe className="mr-2 text-amber-500" />
               Region of Origin
             </label>
@@ -265,7 +377,7 @@ const AddProductForm = () => {
         {/* Dimensions */}
         <div className="grid md:grid-cols-3 gap-4">
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <Ruler className="mr-2 text-pink-500" />
               Length
             </label>
@@ -280,7 +392,7 @@ const AddProductForm = () => {
             />
           </div>
           <div>
-            <label className='font-semibold text-gray-700'>Width</label>
+            <label>Width</label>
             <input
               type="number"
               name="dimensions.width"
@@ -292,7 +404,7 @@ const AddProductForm = () => {
             />
           </div>
           <div>
-            <label className='font-semibold text-gray-700'>Height</label>
+            <label>Height</label>
             <input
               type="number"
               name="dimensions.height"
@@ -304,7 +416,7 @@ const AddProductForm = () => {
             />
           </div>
           <div>
-            <label className='font-semibold text-gray-700'>Dimension Unit</label>
+            <label>Dimension Unit</label>
             <select
               name="dimensions.unit"
               value={productData.dimensions.unit}
@@ -320,7 +432,7 @@ const AddProductForm = () => {
         {/* Tags and Materials */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <Tag className="mr-2 text-cyan-500" />
               Product Tags
             </label>
@@ -335,7 +447,7 @@ const AddProductForm = () => {
               <button
                 type="button"
                 onClick={addTag}
-                className="bg-cyan-500 text-white px-4 py-2 font-semibold rounded-r-md hover:bg-cyan-600"
+                className="bg-cyan-500 text-white px-4 py-2 rounded-r-md hover:bg-cyan-600"
               >
                 Add
               </button>
@@ -359,7 +471,7 @@ const AddProductForm = () => {
           </div>
 
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               <Box className="mr-2 text-orange-500" />
               Materials
             </label>
@@ -401,7 +513,7 @@ const AddProductForm = () => {
         {/* Additional Options */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="flex items-center font-semibold mb-2 text-gray-700">
+            <label className="flex items-center mb-2 text-gray-700">
               Craft Type
             </label>
             <input
@@ -438,13 +550,61 @@ const AddProductForm = () => {
           </div>
         </div>
 
+        {/* Weight Section */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <label className="flex items-center mb-2 text-gray-700">
+              Product Weight
+            </label>
+            <div className="flex">
+              <input
+                type="number"
+                name="weight.value"
+                value={productData.weight.value}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-l-md"
+                placeholder="Enter weight"
+                min="0"
+              />
+              <select
+                name="weight.unit"
+                value={productData.weight.unit}
+                onChange={handleChange}
+                className="px-4 py-2 border rounded-r-md"
+              >
+                <option value="g">Grams</option>
+                <option value="kg">Kilograms</option>
+                <option value="lb">Pounds</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="flex items-center mb-2 text-gray-700">
+              Category
+            </label>
+            <input
+              type="text"
+              name="category"
+              value={productData.category}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md"
+              placeholder="Enter product category"
+              required
+            />
+          </div>
+        </div>
+
         {/* Submit Button */}
         <div className="text-center mt-8">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center mx-auto"
+            disabled={loading}
+            className={`bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center mx-auto 
+              ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
-            <Save className="mr-2" /> Save Product
+            <Save className="mr-2" /> 
+            {loading ? 'Saving...' : 'Save Product'}
           </button>
         </div>
       </form>
