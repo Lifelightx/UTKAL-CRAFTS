@@ -26,17 +26,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a phone number'],
     },
-    role: {
-      type: String,
-      enum: ['user', 'seller', 'admin'],
-      default: 'user',
-    },
-    isApproved: {
-      type: Boolean,
-      default: function() {
-        return this.role === 'user'; // Users are approved by default, sellers need approval
-      },
-    },
+    
     addresses: [
       {
         street: String,

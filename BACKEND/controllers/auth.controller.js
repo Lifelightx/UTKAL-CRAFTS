@@ -14,7 +14,7 @@ const generateToken = (id) => {
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, phone, confirmPassword } = req.body;
-  console.log(req.body);
+  
   // Check if user exists
   const userExists = await User.findOne({ email });
   if (password !== confirmPassword){
@@ -32,10 +32,9 @@ export const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     phone,
-    role: role || 'user', // Default to 'user' if not specified
-    isApproved: role === 'seller' ? false : true, // Sellers need approval
+     // Sellers need approval
   });
-
+ 
   if (user) {
     res.status(201).json({
       _id: user._id,
@@ -46,10 +45,12 @@ export const registerUser = asyncHandler(async (req, res) => {
       isApproved: user.isApproved,
       token: generateToken(user._id),
     });
+    
   } else {
     res.status(400);
     throw new Error('Invalid user data');
   }
+  
 });
 
 // @desc    Auth user & get token
