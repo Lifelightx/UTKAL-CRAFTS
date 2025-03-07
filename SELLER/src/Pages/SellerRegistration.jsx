@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Mail, Lock, User, Phone, Briefcase, MapPin, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import craftMan from '../assets/craftman.jpg'
+import axios from 'axios'
+
 const SellerRegistration = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -17,9 +19,14 @@ const SellerRegistration = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
+    axios.post(`http://localhost:5000/api/seller/register`, formData)
+    .then(res => {
+      console.log(res.data)
+    })
+    .catch( err=> console.error(err))
     console.log(formData);
     setFormSubmitted(true);
   };
